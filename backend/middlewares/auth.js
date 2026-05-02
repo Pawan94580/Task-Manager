@@ -7,7 +7,7 @@ const protect = async (req, res, next) => {
     return res.status(401).json({ message: 'Not authorized — no token' });
 
   try {
-    const decoded = jwt.verify(auth.split(' ')[1], process.env.JWT_SECRET);
+    const decoded = jwt.verify(auth.split(' ')[1], process.env.JWT_SECRET || 'fallback_secret');
     req.user = await prisma.user.findUnique({
       where: { id: decoded.id },
       select: { id: true, name: true, email: true, role: true },
