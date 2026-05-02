@@ -19,7 +19,12 @@ export default function Register() {
       toast.success('Account created!');
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Registration failed');
+      const data = err.response?.data;
+      if (data?.errors?.length) {
+        toast.error(data.errors.map(e => e.message).join(', '));
+      } else {
+        toast.error(data?.message || 'Registration failed');
+      }
     } finally { setLoading(false); }
   };
 
